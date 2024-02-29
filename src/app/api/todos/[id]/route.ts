@@ -1,4 +1,5 @@
 import prisma from '@/lib/prisma';
+import { Todo } from '@prisma/client';
 import { NextResponse } from 'next/server';
 
 import * as Yup from 'yup';
@@ -9,16 +10,24 @@ interface Segments {
     }
 }
 
-export async function GET(request: Request, segments: Segments) {
-
-    const {id} = segments.params;
-
+const getTodo = async(id: string): Promise<Todo | null> => {
 
     const todo = await prisma.todo.findFirst({
         where: {
             id
         }
     });
+
+    return todo;
+
+};
+
+export async function GET(request: Request, segments: Segments) {
+
+    const {id} = segments.params;
+
+
+    const todo = getTodo(id);
 
     if(!todo) {
         return NextResponse.json({
@@ -44,11 +53,7 @@ export async function PUT(request: Request, segments: Segments) {
         const {id} = segments.params;
         const {description, complete} = await putSchema.validate(await request.json());
     
-        const todo = prisma.todo.findFirst({
-            where: {
-                id
-            }
-        });
+        const todo = getTodo(id);
     
         if(!todo) {
             return NextResponse.json({
