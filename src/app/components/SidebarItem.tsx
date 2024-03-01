@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useState } from 'react';
 
 interface Props {
     label: string,
@@ -12,6 +13,7 @@ interface Props {
 export const SidebarItem = ({label, href, icon}: Props) => {
 
     const pathname = usePathname();
+
 
     return (
         <li>
