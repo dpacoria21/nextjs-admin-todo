@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 import { TodosGrid } from '@/todos';
 import { Metadata } from 'next';
@@ -13,8 +15,8 @@ export const metadata: Metadata = {
 
 export default async function RestTodosPage() {
 
-    const todos = await prisma.todo.findMany();
-
+    const todos = await prisma.todo.findMany({orderBy: {description: 'asc'}});
+    console.log('Construido');
     return (
         <div>
             {/*TODO: Formulario para agregar todos */}
