@@ -1,6 +1,18 @@
 import { Todo } from '@prisma/client';
 
+const sleep = (seconds: number = 1): Promise<boolean> => {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            resolve(true);
+        }, seconds*1000);
+    });
+};
+
 export const updateTodo = async(id: string, complete: boolean): Promise<Todo> => {
+
+    // TODO: Actualizacion optimista
+    // await sleep(2);
+    
     const body = { complete };
 
     const dbTodo = await fetch(`/api/todos/${id}`, {
