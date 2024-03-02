@@ -2,7 +2,7 @@ import { Todo } from '@prisma/client';
 
 import styles from './TodoItem.module.css';
 import { IoCheckboxOutline, IoSquareOutline } from 'react-icons/io5';
-import { useRouter } from 'next/navigation';
+// import { useRouter } from 'next/navigation';
 
 interface Props {
     todo: Todo,

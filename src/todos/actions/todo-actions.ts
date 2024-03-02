@@ -1,10 +1,11 @@
 'use server';
-
 import prisma from '@/lib/prisma';
 import { Todo } from '@prisma/client';
 import { revalidatePath } from 'next/cache';
+import { NextResponse } from 'next/server';
 
 export const toggleTodo = async(id: string, complete: boolean): Promise<Todo> => {
+
 
     const todo = prisma.todo.findFirst({
         where: {
@@ -23,4 +24,37 @@ export const toggleTodo = async(id: string, complete: boolean): Promise<Todo> =>
 
     revalidatePath('/dashboard/server-todos');
     return updatedTodo;
+};
+
+export const addTodo = async(description: string) => {
+    try {
+
+        const newTodo = prisma.todo.create({
+            data: {
+                description
+            }
+        });
+
+        revalidatePath('/dashboard/server-todos');
+
+        return newTodo;
+
+    }catch(err) {
+        console.log(err);
+        return { 
+            message: 'Error al crear el todo'
+        };
+    }
+};
+
+export const deletedCompleted = async(): Promise<number> => {
+    const {count} = await prisma.todo.deleteMany({
+        where: {
+            complete: true
+        }
+    });
+
+    revalidatePath('/dashboard/server-todos');
+
+    return count;
 };
