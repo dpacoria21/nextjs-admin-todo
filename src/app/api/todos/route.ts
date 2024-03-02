@@ -88,7 +88,7 @@ export async function DELETE(requets: Request) {
         });
         
         return NextResponse.json({
-            todosDeleted
+            ...todosDeleted
         });
 
     }catch(err) {

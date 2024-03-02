@@ -11,8 +11,6 @@ export const updateTodo = async(id: string, complete: boolean): Promise<Todo> =>
         }
     }).then(res => res.json());
 
-    console.log({dbTodo});
-
     return dbTodo;
 
 };
@@ -41,5 +39,5 @@ export const deleteCompletedTodos = async(): Promise<number> => {
         }
     }).then(res => res.json());
 
-    return deletedTodos;
+    return deletedTodos.count;
 };
