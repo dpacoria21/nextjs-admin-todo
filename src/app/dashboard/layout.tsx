@@ -21,7 +21,7 @@ export default function DashboardLayout ({children}: Readonly<{children: React.R
     
     
                 {/* TODO: Contenido en el Layout.tsx */}
-                <div className="px-6 pt-6">
+                <div className="px-6 pt-6 bg-white p-2 m-2 rounded">
                     {children}
                 </div>
             </div>
