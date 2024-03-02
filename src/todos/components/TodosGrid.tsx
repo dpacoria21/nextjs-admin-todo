@@ -12,7 +12,6 @@ interface Props {
 
 export const TodosGrid = ({todos = []}: Props) => {
 
-    console.log(todos);
     const router = useRouter();
     const onToggleTodo = async(id: string, complete: boolean) => {
         const updatedTodo = await todosApi.updateTodo(id, complete);
