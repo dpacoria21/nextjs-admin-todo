@@ -2,7 +2,9 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { CiLogout } from 'react-icons/ci';
 import { SidebarItem } from './SidebarItem';
-import { IoBasketOutline, IoCalendarOutline, IoCheckboxOutline, IoCodeWorkingOutline, IoListOutline } from 'react-icons/io5';
+import { IoBasketOutline, IoCalendarOutline, IoCheckboxOutline, IoCodeWorkingOutline, IoListOutline, IoPerson, IoPersonOutline } from 'react-icons/io5';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '../api/auth/[...nextauth]/route';
 
 const menuItems = [
     {
@@ -30,9 +32,17 @@ const menuItems = [
         label: 'Products',
         href: '/dashboard/products'
     },
+    {
+        icon: <IoPersonOutline />,
+        label: 'Perfil',
+        href: '/dashboard/profile'
+    },
 ];
 
-export const Sidebar = () => {
+export const Sidebar = async() => {
+
+    const session = await getServerSession(authOptions);
+
     return (
         <aside className="ml-[-100%] fixed z-10 top-0 pb-3 px-6 w-full flex flex-col justify-between h-screen border-r bg-white transition duration-300 md:w-4/12 lg:ml-0 lg:w-[25%] xl:w-[20%] 2xl:w-[15%]">
             <div>
@@ -40,14 +50,14 @@ export const Sidebar = () => {
                     {/* TODO: Next/Link hacia dashboard */}
                     <Link href="/dashboard" title="home">
                         {/* Next/Image */}
-                        <Image src="https://tailus.io/sources/blocks/stats-cards/preview/images/logo.svg" width={0} height={0} className="w-auto" priority alt="tailus logo"/>
+                        <Image src={'https://tailus.io/sources/blocks/stats-cards/preview/images/logo.svg'} width={0} height={0} className="w-auto" priority alt="tailus logo"/>
                     </Link>
                 </div>
     
                 <div className="mt-8 text-center">
                     {/* Next/Image */}
-                    <Image src="https://tailus.io/sources/blocks/stats-cards/preview/images/second_user.webp" alt="random_logo" width={200} height={200} className="w-10 h-10 m-auto rounded-full object-cover lg:w-28 lg:h-28"/>
-                    <h5 className="hidden mt-4 text-xl font-semibold text-gray-600 lg:block">Cynthia J. Watts</h5>
+                    <Image src={session?.user?.image ?? 'https://tailus.io/sources/blocks/stats-cards/preview/images/second_user.webp'} alt="random_logo" width={200} height={200} className="w-10 h-10 m-auto rounded-full object-cover lg:w-28 lg:h-28"/>
+                    <h5 className="hidden mt-4 text-xl font-semibold text-gray-600 lg:block">{session?.user?.name ?? 'Anonymous'}</h5>
                     <span className="hidden text-gray-400 lg:block">Admin</span>
                 </div>
     
