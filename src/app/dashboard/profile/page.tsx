@@ -25,6 +25,15 @@ export default function ProfilePage() {
                 <span>
                     {session?.user?.image}   
                 </span>
+                <span>
+                    {session?.user?.id}   
+                </span>
+                <span>
+                    {session?.user?.roles?.join(', ')}   
+                </span>
+                <div>
+                    {JSON.stringify(session, null, 4)}
+                </div>
             </div>
         </div>
     );
