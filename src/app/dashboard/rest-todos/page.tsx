@@ -6,7 +6,8 @@ import { Metadata } from 'next';
 
 import prisma from '@/lib/prisma';
 import { NewTodo } from '@/app/components';
-import { useRouter } from 'next/navigation';
+import { getUserSessionServer } from '@/auth/actions/auth-actions';
+import { redirect } from 'next/navigation';
 
 export const metadata: Metadata = {
     title: 'Lista de todos',
@@ -15,8 +16,19 @@ export const metadata: Metadata = {
 
 export default async function RestTodosPage() {
 
-    const todos = await prisma.todo.findMany({orderBy: {description: 'asc'}});
-    console.log('Construido');
+    const user = await getUserSessionServer();
+
+    if(!user) redirect('/api/auth/signin');
+
+    const todos = await prisma.todo.findMany(
+        {
+            orderBy: {description: 'asc'},
+            where: {
+                userId: user?.id
+            }
+        }
+    );
+
     return (
         <div>
             {/*TODO: Formulario para agregar todos */}

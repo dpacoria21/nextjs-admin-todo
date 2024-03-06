@@ -1,7 +1,9 @@
 'use server';
+import { getUserSessionServer } from '@/auth/actions/auth-actions';
 import prisma from '@/lib/prisma';
 import { Todo } from '@prisma/client';
 import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
 
 const sleep = (seconds: number = 0): Promise<boolean> => {
     return new Promise((resolve, reject) => {
@@ -13,7 +15,7 @@ const sleep = (seconds: number = 0): Promise<boolean> => {
 
 export const toggleTodo = async(id: string, complete: boolean): Promise<Todo> => {
 
-    await sleep(3);
+    // await sleep(3);
 
     const todo = prisma.todo.findFirst({
         where: {
@@ -35,11 +37,14 @@ export const toggleTodo = async(id: string, complete: boolean): Promise<Todo> =>
 };
 
 export const addTodo = async(description: string) => {
+    const user = await getUserSessionServer();
+    if(!user) redirect('/api/auth/signin');
     try {
 
         const newTodo = prisma.todo.create({
             data: {
-                description
+                description,
+                userId: user.id
             }
         });
 
@@ -56,9 +61,12 @@ export const addTodo = async(description: string) => {
 };
 
 export const deletedCompleted = async(): Promise<number> => {
+    const user = await getUserSessionServer();
+    if(!user) redirect('/api/auth/signin');
     const {count} = await prisma.todo.deleteMany({
         where: {
-            complete: true
+            complete: true,
+            userId: user.id
         }
     });
 
